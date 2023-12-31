@@ -1,9 +1,13 @@
 # yaml-language-server: $schema=https://json.schemastore.org/taskfile
+# cSpell:ignore esbuild, outfile
 ---
 version: '3'
 
 tasks:
-  build: npx tsc
+  build:
+    cmds:
+      - npx esbuild src/cli.mts --outfile=dist/cli.mjs --platform=node --format=esm --bundle --minify
+      - chmod +x dist/cli.mjs
 
   lint:
     deps:
@@ -18,3 +22,5 @@ tasks:
   lint:eslint: npx eslint --ext ts,mts .
 
   test: npx vitest
+
+  clean: rm -rf dist

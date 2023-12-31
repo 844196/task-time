@@ -1,8 +1,9 @@
 {
   "extends": ["@tsconfig/strictest/tsconfig.json", "@tsconfig/node20/tsconfig.json"],
   "compilerOptions": {
-    "outDir": "dist"
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.*"]
+  "include": ["src/**/*"]
 }
