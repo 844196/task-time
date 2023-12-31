@@ -1,0 +1,14 @@
+{
+  "name": "@844196/task-time",
+  "version": "0.0.0",
+  "homepage": "https://github.com/844196/task-time",
+  "bugs": {
+    "url": "https://github.com/844196/task-time/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/844196/task-time.git"
+  },
+  "license": "MIT",
+  "author": "Masaya Takeda <844196@gmail.com>"
+}
