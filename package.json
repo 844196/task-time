@@ -10,5 +10,23 @@
     "url": "https://github.com/844196/task-time.git"
   },
   "license": "MIT",
-  "author": "Masaya Takeda <844196@gmail.com>"
+  "author": "Masaya Takeda <844196@gmail.com>",
+  "type": "module",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@tsconfig/strictest": "^2.0.2",
+    "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "npm:eslint-plugin-i@^2.29.1",
+    "prettier": "^3.1.1",
+    "typescript": "~5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }

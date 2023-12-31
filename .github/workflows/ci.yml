@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write # For delete actions cache
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Cache
+        id: cache
+        uses: actions/cache/restore@v3
+        with:
+          path: /tmp/image-cache
+          key: ${{ runner.os }}-ci-workspace-${{ github.event_name == 'push' && github.ref_name || github.base_ref }}
+          restore-keys: |
+            ${{ runner.os }}-ci-workspace-main
+            ${{ runner.os }}-ci-workspace-
+            ${{ runner.os }}-
+
+      - name: Restore cache
+        if: ${{ steps.cache.outputs.cache-hit }}
+        run: |
+          docker load --input /tmp/image-cache/ci-workspace.tar
+
+      - name: Run test
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ci-workspace
+          cacheFrom: ci-workspace:latest
+          imageTag: latest
+          push: never
+          env: |
+            CI=true
+          runCmd: |
+            set -euo pipefail
+            aqua i
+            npm ci
+            task lint test build
+
+      - name: Store cache
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          mkdir -p /tmp/image-cache
+          docker save --output /tmp/image-cache/ci-workspace.tar ci-workspace:latest
+
+      - name: Delete previous cache
+        if: ${{ github.event_name == 'push' && steps.cache.outputs.cache-hit }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install actions/gh-actions-cache
+          gh actions-cache delete --confirm "${{ runner.os }}-ci-workspace-${{ github.ref_name }}"
+
+      - name: Upload cache
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/cache/save@v3
+        with:
+          path: /tmp/image-cache
+          key: ${{ runner.os }}-ci-workspace-${{ github.ref_name }}

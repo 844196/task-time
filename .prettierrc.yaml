@@ -1,0 +1,5 @@
+# yaml-language-server: $schema=https://json.schemastore.org/prettierrc
+---
+printWidth: 120
+singleQuote: true
+semi: false

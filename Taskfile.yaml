@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile
+---
+version: '3'
+
+tasks:
+  build: npx tsc
+
+  lint:
+    deps:
+      - lint:tsc
+      - lint:prettier
+      - lint:eslint
+
+  lint:tsc: npx tsc --noEmit
+
+  lint:prettier: npx prettier --check .
+
+  lint:eslint: npx eslint --ext ts,mts .
+
+  test: npx vitest
