@@ -24,6 +24,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: npm
 
+      - uses: aquaproj/aqua-installer@v2.2.0
+        with:
+          aqua_version: v2.16.4
+
       - run: npm ci
 
       - run: task publish
