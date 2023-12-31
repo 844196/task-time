@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/844196/task-time.git"
+    "url": "git+https://github.com/844196/task-time.git"
   },
   "license": "MIT",
   "author": "Masaya Takeda <844196@gmail.com>",
