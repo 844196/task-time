@@ -2,9 +2,13 @@ FROM node:20.9.0-bullseye as node
 
 FROM node as workspace
 
+ARG USER_UID=1000
+ARG USER_GID=1000
 ARG AQUA_VERSION=v2.16.4
 
 RUN \
+  usermod --non-unique --uid ${USER_UID} node && \
+  groupmod --non-unique --gid ${USER_GID} node && \
   install -o node -g node -d /workspace/ && \
   install -o node -g node -d /workspace/node_modules/
 

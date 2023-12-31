@@ -43,6 +43,11 @@ jobs:
         run: |
           docker load --input /tmp/image-cache/ci-workspace.tar
 
+      - name: Setup environment variables
+        run: |
+          echo "HOST_UID=$(id -u)" >> .env
+          echo "HOST_GID=$(id -g)" >> .env
+
       - name: Run test
         uses: devcontainers/ci@v0.3
         with:
