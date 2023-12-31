@@ -46,4 +46,11 @@ tasks:
     cmds:
       - 'npm version {{.VERSION}} -m ":bookmark: v%s"'
 
+  publish:
+    deps:
+      - build
+    preconditions:
+      - npx can-npm-publish
+    cmd: npm publish
+
   clean: rm -rf dist
