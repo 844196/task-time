@@ -44,6 +44,7 @@ jobs:
           npm version --no-git-tag-version ${{ github.event.inputs.version }}
           git add package.json package-lock.json
           git commit -m ":bookmark: v$(jq -r '.version' package.json)"
+          git push -u origin HEAD
 
       - name: Create pull request and enqueue merge
         # Requirements:
@@ -55,7 +56,7 @@ jobs:
         #      * https://github.com/peter-evans/create-pull-request/issues/48
         #      * https://stackoverflow.com/questions/52200096/github-pull-request-waiting-for-status-to-be-reported/69169858#69169858
         run: |
-          PR_URL=$(gh pr create --fill --label Release)
+          PR_URL=$(gh pr create --base main --fill --label Release)
           gh pr merge --auto --merge --delete-branch $PR_URL
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
