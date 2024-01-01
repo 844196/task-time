@@ -24,29 +24,6 @@ tasks:
 
   test: npx vitest
 
-  tag:patch:
-    cmd:
-      task: tag:internal
-      vars: { VERSION: 'patch' }
-
-  tag:minor:
-    cmd:
-      task: tag:internal
-      vars: { VERSION: 'minor' }
-
-  tag:major:
-    cmd:
-      task: tag:internal
-      vars: { VERSION: 'major' }
-
-  tag:internal:
-    internal: true
-    label: 'tag:internal:{{.VERSION}}'
-    preconditions:
-      - git diff --quiet --exit-code && git diff --quiet --exit-code --cached
-    cmds:
-      - 'npm version {{.VERSION}} -m ":bookmark: v%s"'
-
   publish:
     deps:
       - build
