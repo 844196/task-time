@@ -1,19 +1,19 @@
 {
-  "name": "@efumaxay/task-time",
+  "name": "@efumaxay/man-hour",
   "version": "0.0.5",
-  "homepage": "https://github.com/844196/task-time",
+  "homepage": "https://github.com/844196/man-hour",
   "bugs": {
-    "url": "https://github.com/844196/task-time/issues"
+    "url": "https://github.com/844196/man-hour/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/844196/task-time.git"
+    "url": "git+https://github.com/844196/man-hour.git"
   },
   "license": "MIT",
   "author": "Masaya Takeda <844196@gmail.com>",
   "type": "module",
   "bin": {
-    "task-time": "dist/cli.mjs"
+    "man-hour": "dist/cli.mjs"
   },
   "files": [
     "dist"
