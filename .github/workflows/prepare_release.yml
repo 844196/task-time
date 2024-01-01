@@ -34,7 +34,6 @@ jobs:
           node-version: ${{ steps.node_version.outputs.node_version }}
 
       - run: |
-          git fetch
           git config --local user.name 'GitHub Actions'
           git config --local user.email 'actions@github.com'
           git checkout -b actions/main/release-${{ github.event.inputs.version }}
