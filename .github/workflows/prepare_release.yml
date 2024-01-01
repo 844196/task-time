@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> $GITHUB_OUTPUT
         id: node_version
@@ -32,16 +34,20 @@ jobs:
           node-version: ${{ steps.node_version.outputs.node_version }}
 
       - run: |
+          git fetch
           git config --local user.name 'GitHub Actions'
           git config --local user.email 'actions@github.com'
           git checkout -b actions/main/release-${{ github.event.inputs.version }}
           npm version --no-git-tag-version ${{ github.event.inputs.version }}
           git add package.json package-lock.json
           git commit -m ":bookmark: v$(jq -r '.version' package.json)"
-          git push origin HEAD
+          git push -u origin HEAD
 
       - run: |
           PR_URL=$(gh pr create --base main --head actions/main/release-${{ github.event.inputs.version }} --fill --label Release)
+          # SEE: https://stackoverflow.com/questions/52200096/github-pull-request-waiting-for-status-to-be-reported/69169858#69169858
+          git commit --amend --no-edit
+          git push --force-with-lease origin HEAD
           gh pr merge --auto --merge --delete-branch $PR_URL
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
