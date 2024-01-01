@@ -25,7 +25,8 @@ jobs:
 
       - uses: softprops/action-gh-release@v1
         with:
-          draft: true
           name: v${{ steps.released_version.outputs.version }}
           tag_name: v${{ steps.released_version.outputs.version }}
           generate_release_notes: true
+          # SEE: https://stackoverflow.com/questions/52200096/github-pull-request-waiting-for-status-to-be-reported/69169858#69169858
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
