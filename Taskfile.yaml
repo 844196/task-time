@@ -6,7 +6,7 @@ version: '3'
 tasks:
   build:
     cmds:
-      - npx esbuild src/cli.mts --outfile=dist/cli.mjs --platform=node --format=esm --bundle --minify
+      - npx esbuild src/cli.mts --outfile=dist/cli.mjs --platform=node --format=esm --bundle
       - chmod +x dist/cli.mjs
 
   lint:
