@@ -23,8 +23,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
 
       - run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> $GITHUB_OUTPUT
         id: node_version
@@ -40,7 +38,7 @@ jobs:
           npm version --no-git-tag-version ${{ github.event.inputs.version }}
           git add package.json package-lock.json
           git commit -m ":bookmark: v$(jq -r '.version' package.json)"
-          git push -u origin HEAD
+          git push origin HEAD
 
       - run: |
           PR_URL=$(gh pr create --base main --head actions/main/release-${{ github.event.inputs.version }} --fill --label Release)
