@@ -12,8 +12,8 @@ tasks:
 
   lint:
     deps:
-      - lint:tsc
       - lint:prettier
+      - lint:tsc
       - lint:eslint
 
   lint:tsc: npx tsc --noEmit
