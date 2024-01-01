@@ -1,3 +1,5 @@
+# cSpell:ignore aquaproj
+---
 name: CI
 
 on:
@@ -9,7 +11,6 @@ on:
       - opened
       - reopened
       - synchronize
-  workflow_dispatch:
 
 permissions:
   contents: read
