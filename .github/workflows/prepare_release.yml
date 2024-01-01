@@ -43,7 +43,7 @@ jobs:
           git push -u origin HEAD
 
       - run: |
-          PR_URL=$(gh pr create --base main --head actions/main/release-${{ github.event.inputs.version }} --label Release)
+          PR_URL=$(gh pr create --base main --head actions/main/release-${{ github.event.inputs.version }} --fill --label Release)
           gh pr merge --auto --merge --delete-branch $PR_URL
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
