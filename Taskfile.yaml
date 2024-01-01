@@ -6,7 +6,8 @@ version: '3'
 tasks:
   build:
     cmds:
-      - npx esbuild src/cli.mts --outfile=dist/cli.mjs --platform=node --format=esm --bundle
+      # SEE: https://github.com/evanw/esbuild/issues/1921#issuecomment-1720348876
+      - npx esbuild src/cli.mts --outfile=dist/cli.mjs --platform=node --format=esm --bundle --banner:js='const require = (await import("node:module")).createRequire(import.meta.url)'
       - chmod +x dist/cli.mjs
 
   lint:
