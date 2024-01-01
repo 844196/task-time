@@ -3,9 +3,11 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - v*
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
 
 permissions:
   contents: write
@@ -14,8 +16,16 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'Release')
     steps:
       - uses: actions/checkout@v4
+
+      - run: echo "version=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+        id: released_version
+
       - uses: softprops/action-gh-release@v1
         with:
           draft: true
+          name: v${{ steps.released_version.outputs.version }}
+          tag_name: v${{ steps.released_version.outputs.version }}
+          generate_release_notes: true
