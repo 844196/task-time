@@ -19,7 +19,10 @@
     "dist"
   ],
   "dependencies": {
-    "cac": "^6.7.14"
+    "@date-fns/utc": "^1.1.1",
+    "cac": "^6.7.14",
+    "date-fns": "^3.0.6",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
