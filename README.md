@@ -17,16 +17,20 @@ $ npx @efumaxay/man-hour '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00'
 ### Advanced
 
 ```console
-$ npx @efumaxay/man-hour '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00' \
-    --step=0.5 \
-    --work-start='10:00+09:00' \
-    --work-end='19:00+09:00' \
-    --work-period='05:00+09:00' \
-    --break-start='13:00+09:00' \
-    --break-end='14:00+09:00' \
-    --reporter=json \
-    --locale=ja-JP \
-    --timezone=Asia/Tokyo
+$ cat .manhourrc.json
+{
+  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v0.3.0/json-schema/manhourrc.json",
+  "step": 0.5,
+  "workStart": "10:00+09:00",
+  "workEnd": "19:00+09:00",
+  "workPeriod": "05:00+09:00",
+  "breakStart": "13:00+09:00",
+  "breakEnd": "14:00+09:00",
+  "timezone": "Asia/Tokyo",
+  "locale": "ja-JP"
+}
+
+$ npx @efumaxay/man-hour --reporter json '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00'
 [
   {
     "interval": "2023/11/30木曜日 15:23:33～19:00:00",
