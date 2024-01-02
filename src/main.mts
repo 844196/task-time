@@ -8,22 +8,20 @@ import { ceilManHour } from './ceilManHour.mjs'
 import { eachTaskTimeInterval } from './eachTaskTimeInterval.mjs'
 import { timeWithOffsetSchema } from './types.mjs'
 
-export const configSchema = z
-  .object({
-    workStart: timeWithOffsetSchema,
-    workEnd: timeWithOffsetSchema,
-    workPeriod: timeWithOffsetSchema,
-    breakStart: timeWithOffsetSchema,
-    breakEnd: timeWithOffsetSchema,
-    step: z.number().positive(),
-    reporter: z.enum(['simple', 'json']),
-    timezone: z.string(),
-    locale: z.string(),
-  })
-  .partial()
-export type Config = z.infer<typeof configSchema>
+export const contextSchema = z.object({
+  workStart: timeWithOffsetSchema,
+  workEnd: timeWithOffsetSchema,
+  workPeriod: timeWithOffsetSchema,
+  breakStart: timeWithOffsetSchema,
+  breakEnd: timeWithOffsetSchema,
+  step: z.number().positive(),
+  reporter: z.enum(['simple', 'json']),
+  timezone: z.string(),
+  locale: z.string(),
+})
+export type Context = z.infer<typeof contextSchema>
 
-export function main(start: string, end: string, options: unknown) {
+export function main(start: string, end: string, context: unknown) {
   const {
     workStart: workStart,
     workEnd: workEnd,
@@ -34,7 +32,7 @@ export function main(start: string, end: string, options: unknown) {
     reporter: reporter,
     timezone: timeZone,
     locale: locale,
-  } = configSchema.required().parse(options)
+  } = contextSchema.parse(context)
 
   const intervals = eachTaskTimeInterval(new UTCDate(start), new UTCDate(end), {
     workStart,

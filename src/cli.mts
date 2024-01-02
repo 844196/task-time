@@ -4,19 +4,21 @@
 
 import { cac } from 'cac'
 import { rcFile } from 'rc-config-loader'
+import { z } from 'zod'
 import { version } from '../package.json'
-import { main, type Config, configSchema } from './main.mjs'
+import { main, contextSchema, Context } from './main.mjs'
 
-const config = ((name: string) => {
+const config = (() => {
+  const schema = contextSchema.partial()
   try {
-    return configSchema.parse(rcFile<Config>(name)?.config ?? {})
+    return schema.parse(rcFile<z.infer<typeof schema>>('manhour')?.config ?? {})
   } catch {
     return {}
   }
-})('manhour')
+})()
 
 const { timeZone: systemTimezone, locale: systemLocale } = Intl.DateTimeFormat().resolvedOptions()
-const defaultOptions = {
+const defaultContext = {
   workStart: '09:00+09:00',
   workEnd: '18:00+09:00',
   workPeriod: '05:00+09:00',
@@ -27,22 +29,24 @@ const defaultOptions = {
   timezone: systemTimezone,
   locale: systemLocale,
   ...config,
-} as const satisfies Config
+} as Context
 
 const cli = cac()
 
 cli
-  .command('<start> <end>')
-  .option('-s, --step <step>', 'Ceil step', { default: defaultOptions.step })
-  .option(`-r, --reporter <reporter>`, 'Reporter', { default: defaultOptions.reporter })
-  .option('--work-start <time>', 'Work start', { default: defaultOptions.workStart })
-  .option('--work-end <time>', 'Work end', { default: defaultOptions.workEnd })
-  .option('--work-period <time>', 'Work period', { default: defaultOptions.workPeriod })
-  .option('--break-start <time>', 'Break start', { default: defaultOptions.breakStart })
-  .option('--break-end <time>', 'Break end', { default: defaultOptions.breakEnd })
-  .option('--timezone <timezone>', 'Timezone for reporter', { default: defaultOptions.timezone })
-  .option('--locale <locale>', 'Locale for reporter', { default: defaultOptions.locale })
-  .action(main)
+  .command('<start> [end]')
+  .option('-s, --step <step>', 'Ceil step', { default: defaultContext.step })
+  .option(`-r, --reporter <reporter>`, 'Reporter', { default: defaultContext.reporter })
+  .option('--work-start <time>', 'Work start', { default: defaultContext.workStart })
+  .option('--work-end <time>', 'Work end', { default: defaultContext.workEnd })
+  .option('--work-period <time>', 'Work period', { default: defaultContext.workPeriod })
+  .option('--break-start <time>', 'Break start', { default: defaultContext.breakStart })
+  .option('--break-end <time>', 'Break end', { default: defaultContext.breakEnd })
+  .option('--timezone <timezone>', 'Timezone for reporter', { default: defaultContext.timezone })
+  .option('--locale <locale>', 'Locale for reporter', { default: defaultContext.locale })
+  .action((start: string, end: string | undefined, options: unknown) => {
+    main(start, end ?? new Date().toISOString(), options)
+  })
 
 cli.help()
 
