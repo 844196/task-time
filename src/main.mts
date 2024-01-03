@@ -21,6 +21,18 @@ export const contextSchema = z.object({
 })
 export type Context = z.infer<typeof contextSchema>
 
+type Record = {
+  interval: string
+  hours: number
+  isoInterval: string
+  isoDuration: string
+}
+
+type Report = {
+  records: Record[]
+  totalHours: number
+}
+
 export function main(start: string, end: string, context: unknown) {
   const {
     workStart: workStart,
@@ -48,34 +60,34 @@ export function main(start: string, end: string, context: unknown) {
     timeStyle: 'medium',
   })
 
-  const logs = intervals.reduce(
-    (acc, interval) => {
-      const duration = intervalToDuration(interval)
+  const records = intervals.reduce((acc, interval) => {
+    const duration = intervalToDuration(interval)
 
-      acc.push({
-        interval: intervalFormatter.formatRange(new Date(interval.start), new Date(interval.end)),
-        hours: ceilManHour(add(new Date(0), duration).getTime() / 1000 / 60 / 60, step),
-        isoInterval: `${formatISO(interval.start)}/${formatISO(interval.end)}`,
-        isoDuration: formatISODuration(duration),
-      })
+    acc.push({
+      interval: intervalFormatter.formatRange(new Date(interval.start), new Date(interval.end)),
+      hours: ceilManHour(add(new Date(0), duration).getTime() / 1000 / 60 / 60, step),
+      isoInterval: `${formatISO(interval.start)}/${formatISO(interval.end)}`,
+      isoDuration: formatISODuration(duration),
+    })
 
-      return acc
-    },
-    [] as { interval: string; hours: number; isoInterval: string; isoDuration: string }[],
-  )
+    return acc
+  }, [] as Record[])
+
+  const report: Report = {
+    records,
+    totalHours: +records
+      .map(({ hours }) => hours)
+      .reduce((acc, hours) => acc + hours, 0)
+      .toFixed(1),
+  }
 
   switch (reporter) {
     case 'simple': {
-      console.log(
-        logs
-          .map(({ hours }) => hours)
-          .reduce((acc, hours) => acc + hours, 0)
-          .toFixed(1),
-      )
+      console.log(report.totalHours)
       break
     }
     case 'json': {
-      console.log(JSON.stringify(logs, null, 2))
+      console.log(JSON.stringify(report, null, 2))
       break
     }
   }
