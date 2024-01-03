@@ -15,7 +15,6 @@ export const contextSchema = z.object({
   breakStart: timeWithOffsetSchema,
   breakEnd: timeWithOffsetSchema,
   step: z.number().positive(),
-  reporter: z.enum(['simple', 'json']),
   timezone: z.string(),
   locale: z.string(),
 })
@@ -28,11 +27,6 @@ type Record = {
   isoDuration: string
 }
 
-type Report = {
-  records: Record[]
-  totalHours: number
-}
-
 export function main(start: string, end: string, context: unknown) {
   const {
     workStart: workStart,
@@ -41,7 +35,6 @@ export function main(start: string, end: string, context: unknown) {
     breakStart: breakStart,
     breakEnd: breakEnd,
     step: step,
-    reporter: reporter,
     timezone: timeZone,
     locale: locale,
   } = contextSchema.parse(context)
@@ -73,22 +66,5 @@ export function main(start: string, end: string, context: unknown) {
     return acc
   }, [] as Record[])
 
-  const report: Report = {
-    records,
-    totalHours: +records
-      .map(({ hours }) => hours)
-      .reduce((acc, hours) => acc + hours, 0)
-      .toFixed(1),
-  }
-
-  switch (reporter) {
-    case 'simple': {
-      console.log(report.totalHours)
-      break
-    }
-    case 'json': {
-      console.log(JSON.stringify(report, null, 2))
-      break
-    }
-  }
+  console.log(JSON.stringify(records, null, 2))
 }
