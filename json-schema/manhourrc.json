@@ -20,10 +20,6 @@
     "step": {
       "type": "number"
     },
-    "reporter": {
-      "type": "string",
-      "enum": ["simple", "json"]
-    },
     "timezone": {
       "type": "string"
     },

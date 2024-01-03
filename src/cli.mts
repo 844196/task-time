@@ -25,7 +25,6 @@ const defaultContext = {
   breakStart: '12:00+09:00',
   breakEnd: '13:00+09:00',
   step: 0.1,
-  reporter: 'simple',
   timezone: systemTimezone,
   locale: systemLocale,
   ...config,
@@ -36,14 +35,13 @@ const cli = cac()
 cli
   .command('<start> [end]')
   .option('-s, --step <step>', 'Ceil step', { default: defaultContext.step })
-  .option(`-r, --reporter <reporter>`, 'Reporter', { default: defaultContext.reporter })
   .option('--work-start <time>', 'Work start', { default: defaultContext.workStart })
   .option('--work-end <time>', 'Work end', { default: defaultContext.workEnd })
   .option('--work-period <time>', 'Work period', { default: defaultContext.workPeriod })
   .option('--break-start <time>', 'Break start', { default: defaultContext.breakStart })
   .option('--break-end <time>', 'Break end', { default: defaultContext.breakEnd })
-  .option('--timezone <timezone>', 'Timezone for reporter', { default: defaultContext.timezone })
-  .option('--locale <locale>', 'Locale for reporter', { default: defaultContext.locale })
+  .option('--timezone <timezone>', 'Timezone', { default: defaultContext.timezone })
+  .option('--locale <locale>', 'Locale', { default: defaultContext.locale })
   .action((start: string, end: string | undefined, options: unknown) => {
     main(start, end ?? new Date().toISOString(), options)
   })
