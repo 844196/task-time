@@ -13,6 +13,8 @@ on:
           - minor
           - major
 
+run-name: Prepare ${{ github.event.inputs.version }} release
+
 permissions:
   contents: write
 
@@ -21,15 +23,18 @@ jobs:
     name: Prepare release
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           # SEE: https://yoshiori.hatenablog.com/entry/2021/12/08/220839
           ref: main
 
-      - run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> $GITHUB_OUTPUT
+      - name: Compute node version
+        run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> "$GITHUB_OUTPUT"
         id: node_version
 
-      - uses: actions/setup-node@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.node_version.outputs.node_version }}
 

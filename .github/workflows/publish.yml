@@ -7,6 +7,8 @@ on:
     types:
       - published
 
+run-name: Publish ${{ github.event.release.tag_name }}
+
 permissions:
   contents: read
 
@@ -15,23 +17,29 @@ jobs:
     name: Publish to npm
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> $GITHUB_OUTPUT
+      - name: Compute node version
+        run: echo "node_version=$(grep -P -o '(?<=node:)[0-9]+\.[0-9]+\.[0-9]+' Dockerfile)" >> "$GITHUB_OUTPUT"
         id: node_version
 
-      - uses: actions/setup-node@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ steps.node_version.outputs.node_version }}
           registry-url: 'https://registry.npmjs.org'
           cache: npm
 
-      - uses: aquaproj/aqua-installer@v2.2.0
+      - name: Setup aqua
+        uses: aquaproj/aqua-installer@v2.2.0
         with:
           aqua_version: v2.16.4
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      - run: task publish
+      - name: Publish
+        run: task publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
