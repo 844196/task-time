@@ -51,13 +51,27 @@ export function eachTaskTimeInterval(
       break
     }
 
-    if (isAfter(utcEnd, workEnd) && isBefore(cursor, workEnd)) {
+    // ここに到達する時点で就業日境界を超える (i.e. 1日以上かかる) ことが確定
+
+    if (isBefore(cursor, workEnd)) {
       intervals.push(interval(cursor, workEnd))
       cursor = workEnd
+    } else {
+      // 終業時刻以降に開始した場合、区間の終点を推定することができない
+      // そのため、便宜上長さ0の区間を追加しておく
+      intervals.push(interval(cursor, cursor))
     }
 
     const tomorrow = addDays(parse(optsWorkStart, 'HH:mmXXX', cursor), 1)
-    cursor = isWeekend(tomorrow) ? nextMonday(parse(optsWorkStart, 'HH:mmXXX', cursor)) : tomorrow
+    const nextDay = isWeekend(tomorrow) ? nextMonday(parse(optsWorkStart, 'HH:mmXXX', cursor)) : tomorrow
+    if (isAfter(utcEnd, workPeriod) && isBefore(utcEnd, nextDay)) {
+      // 就業日境界から始業時刻までの間に作業終了した場合、区間の始点を推定することができない
+      // そのため、便宜上長さ0の区間を追加しておく
+      intervals.push(interval(utcEnd, utcEnd))
+      break
+    }
+
+    cursor = nextDay
   }
 
   return intervals
