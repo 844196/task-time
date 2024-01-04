@@ -1,0 +1,33 @@
+name: Update major release tag
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup git
+        run: |
+          git config --local user.name 'GitHub Actions'
+          git config --local user.email 'actions@github.com'
+
+      - name: Compute major version
+        id: major_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "major_version=${VERSION%%.*}" >> "$GITHUB_OUTPUT"
+
+      - name: Update major release tag
+        run: |
+          git tag -f v${{ steps.major_version.outputs.major_version }}
+          git push -f origin v${{ steps.major_version.outputs.major_version }}
