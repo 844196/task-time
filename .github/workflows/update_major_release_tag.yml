@@ -29,5 +29,5 @@ jobs:
 
       - name: Update major release tag
         run: |
-          git tag -f v${{ steps.major_version.outputs.major_version }}
-          git push -f origin v${{ steps.major_version.outputs.major_version }}
+          git tag -f ${{ steps.major_version.outputs.major_version }}
+          git push -f origin ${{ steps.major_version.outputs.major_version }}
