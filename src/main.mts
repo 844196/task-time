@@ -27,8 +27,10 @@ type Record = {
   isoDuration: string
 }
 
-export function main(start: string, end: string, context: unknown) {
-  const {
+export function main(
+  start: string,
+  end: string,
+  {
     workStart: workStart,
     workEnd: workEnd,
     workPeriod: workPeriod,
@@ -37,8 +39,8 @@ export function main(start: string, end: string, context: unknown) {
     step: step,
     timezone: timeZone,
     locale: locale,
-  } = contextSchema.parse(context)
-
+  }: Context,
+) {
   const intervals = eachTaskTimeInterval(new UTCDate(start), new UTCDate(end), {
     workStart,
     workEnd,

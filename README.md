@@ -48,20 +48,46 @@ man-hour '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00' \
 ]
 ```
 
-You can also set options in saved configuration files (`${PWD}/.manhourrc.{json,yml,yaml}`).
+## :gear: Configurations
 
-```json
-{
-  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v1/json-schema/manhourrc.json",
-  "step": 0.5,
-  "workStart": "10:00+09:00",
-  "workEnd": "19:00+09:00",
-  "workPeriod": "05:00+09:00",
-  "breakStart": "13:00+09:00",
-  "breakEnd": "14:00+09:00",
-  "timezone": "Asia/Tokyo",
-  "locale": "ja-JP"
-}
+You can also set options in saved configuration files.
+
+### Global config
+
+Default: `${XDG_CONFIG_HOME:-${HOME}/.config}/man-hour/config.{json,yml,yaml}`
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/844196/man-hour/v1/json-schema/manhourrc.json
+---
+timezone: Asia/Tokyo
+locale: ja-JP
+```
+
+You can override global config filepath:
+
+```sh
+MAN_HOUR_GLOBAL_CONFIG=/path/to/config.global
+```
+
+### Config
+
+Default: `${PWD}/.manhourrc.{json,yml,yaml}`
+
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/844196/man-hour/v1/json-schema/manhourrc.json
+---
+step: 0.1
+workStart: 10:00+09:00
+workEnd: 19:00+09:00
+workPeriod: 05:00+09:00
+breakStart: 13:00+09:00
+breakEnd: 14:00+09:00
+```
+
+You can override config filepath:
+
+```sh
+MAN_HOUR_CONFIG=/path/to/config
 ```
 
 ## :bulb: Tips
