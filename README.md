@@ -52,7 +52,7 @@ You can also set options in saved configuration files (`${PWD}/.manhourrc.{json,
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v0/json-schema/manhourrc.json",
+  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v1/json-schema/manhourrc.json",
   "step": 0.5,
   "workStart": "10:00+09:00",
   "workEnd": "19:00+09:00",
@@ -81,12 +81,12 @@ man-hour --step 0.1 '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00' \
 
 ```sh
 man-hour --step 0.1 '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00' \
-    | jq -r '["Record", "Hours"], (.[] | [.interval, .hours]) | @csv' \
+    | jq -r '["Interval", "Hours"], (.[] | [.interval, .hours]) | @csv' \
     | csview --style markdown
 ```
 
 ```markdown
-| Record                              | Hours |
+| Interval                            | Hours |
 | ----------------------------------- | ----- |
 | 2023/11/30木曜日 15:23:33～19:00:00 | 3.7   |
 | 2023/12/1金曜日 10:00:00～13:00:00  | 3     |
@@ -94,7 +94,7 @@ man-hour --step 0.1 '2023-11-30T15:23:33+09:00' '2023-12-04T11:34:29+09:00' \
 | 2023/12/4月曜日 10:00:00～11:34:29  | 1.6   |
 ```
 
-| Record                              | Hours |
+| Interval                            | Hours |
 | ----------------------------------- | ----- |
 | 2023/11/30木曜日 15:23:33～19:00:00 | 3.7   |
 | 2023/12/1金曜日 10:00:00～13:00:00  | 3     |
