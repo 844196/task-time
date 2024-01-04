@@ -9,7 +9,7 @@ on:
     types:
       - closed
 
-run-name: Release from ${{ github.base_ref }} (#${{ github.event.pull_request.number }})
+run-name: Release (${{ join(github.event.pull_request.labels.*.name, ', ') }})
 
 permissions:
   contents: read
@@ -18,7 +18,12 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
-    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'Release')
+    if: >-
+      github.event.pull_request.merged == true && (
+        contains(github.event.pull_request.labels.*.name, 'release:patch') ||
+        contains(github.event.pull_request.labels.*.name, 'release:minor') ||
+        contains(github.event.pull_request.labels.*.name, 'release:major')
+      )
     steps:
       - name: Checkout
         uses: actions/checkout@v4
