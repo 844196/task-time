@@ -52,7 +52,7 @@ You can also set options in saved configuration files (`${PWD}/.manhourrc.{json,
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v0.5.0/json-schema/manhourrc.json",
+  "$schema": "https://raw.githubusercontent.com/844196/man-hour/v0/json-schema/manhourrc.json",
   "step": 0.5,
   "workStart": "10:00+09:00",
   "workEnd": "19:00+09:00",
